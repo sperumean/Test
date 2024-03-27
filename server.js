@@ -202,7 +202,8 @@ app.get('/reservation-success/:id', requireAuth, (req, res) => {
         return res.status(404).send('Reservation not found');
       }
       // Render a success template with reservation details
-      res.render('success', { reservation });
+      // Include isAdmin from the session to pass to the EJS template
+      res.render('success', { reservation: reservation.toObject(), isAdmin: req.session.isAdmin });
     })
     .catch(err => {
       console.error('Error fetching reservation:', err);
