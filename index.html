@@ -2,16 +2,52 @@
 <html>
 <head>
   <title>Reservation System</title>
-//  <script>
-  //  // Redirect to the login page
-   // window.location.href = "/login";
- // </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333333;
+    }
+    p {
+      text-align: center;
+      color: #666666;
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 3px;
+      margin: 0 10px;
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to the Reservation System</h1>
-  <p>Please log in or sign up to make a reservation.</p>
-  <a href="/login">Login</a>
-  <br>
-  <a href="/register">Sign Up</a>
+  <div class="container">
+    <h1>Welcome to the Reservation System</h1>
+    <p>Please log in or sign up to make a reservation.</p>
+    <div class="button-container">
+      <a href="/login" class="button">Login</a>
+      <a href="/register" class="button">Sign Up</a>
+    </div>
+  </div>
 </body>
 </html>
