@@ -162,10 +162,16 @@ app.post('/register', (req, res) => {
       res.status(500).send('Internal Server Error');
     });
 });
+
 // Render the reservation form
 app.get('/reservation', requireAuth, (req, res) => {
-  res.render('reservation');
+  // Check if the user is an admin
+  const isAdmin = req.session.isAdmin || false;
+
+  // Pass the isAdmin flag to your reservation view
+  res.render('reservation', { isAdmin });
 });
+
 
 // Handle form submission
 app.post('/reserve', requireAuth, (req, res) => {
