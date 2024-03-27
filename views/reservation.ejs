@@ -76,6 +76,45 @@
         <textarea id="note" name="note"></textarea>
       </div>
       <button type="submit">Reserve</button>
+
+<!-- Inside your form in reservation.ejs -->
+<div>
+  <label for="department">Department:</label>
+  <select id="department" name="department" required>
+    <option value="">Select a department</option>
+    <option value="Arts and Sciences">Arts and Sciences</option>
+    <!-- Add other departments here -->
+    <option value="Spiritual Life">Spiritual Life</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
+
+<div>
+  <label for="contact">Best Person and Phone Number to Contact:</label>
+  <input type="text" id="contact" name="contact" required>
+</div>
+
+<div>
+  <label for="location">Location:</label>
+  <select id="location" name="location" required>
+    <option value="">Select a location</option>
+    <option value="Community Life Lounge">Community Life Lounge</option>
+    <!-- Add other locations here -->
+    <option value="Wallace Theater (Inside)">Wallace Theater (Inside)</option>
+  </select>
+</div>
+
+<div>
+  <label for="eventStartTime">Time the event starts:</label>
+  <input type="text" id="eventStartTime" name="eventStartTime" placeholder="i.e. 5 to 6pm" required>
+</div>
+
+<div>
+  <label for="pr5000Time">Time you want the PR5000:</label>
+  <input type="text" id="pr5000Time" name="pr5000Time" placeholder="i.e. 11am to 5pm" required>
+</div>
+
+
     <% if (isAdmin) { %>
       <a href="/reservations" style="display: inline-block; margin-top: 20px; padding: 10px; background-color: #4CAF50; color: #ffffff; text-decoration: none; border-radius: 3px;">View All Reservations</a>
     <% } %>

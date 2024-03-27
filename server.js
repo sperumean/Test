@@ -30,9 +30,15 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 const reservationSchema = new mongoose.Schema({
   date: Date,
   time: String,
+  department: String,
+  contact: String,
   location: String,
+  eventStartTime: String,
+  pr5000Time: String,
   note: String
 });
+
+
 
 // Create the reservation model
 const Reservation = mongoose.model('Reservation', reservationSchema);
@@ -175,20 +181,23 @@ app.get('/reservation', requireAuth, (req, res) => {
 
 // Handle form submission
 app.post('/reserve', requireAuth, (req, res) => {
-  const { date, time, location, note } = req.body;
+  const { date, time, department, contact, location, eventStartTime, pr5000Time, note } = req.body;
 
-  // Create a new reservation
+  // Create a new reservation with the additional fields
   const reservation = new Reservation({
     date,
     time,
+    department,
+    contact,
     location,
+    eventStartTime,
+    pr5000Time,
     note
   });
 
   // Save the reservation to the database
   reservation.save()
     .then((savedReservation) => {
-      // Redirect to a route that shows the reservation details
       res.redirect(`/reservation-success/${savedReservation._id}`);
     })
     .catch(err => {
