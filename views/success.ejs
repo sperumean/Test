@@ -40,7 +40,7 @@
     <p>Note: <%= reservation.note %></p>
     <a href="/reservation">Make another reservation</a>
     <!-- Optionally, include a link to view all reservations if the user is an admin -->
-    <% if (req.session.isAdmin) { %>
+    <% if (isAdmin) { %>
       <a href="/reservations">View all reservations</a>
     <% } %>
   </div>
