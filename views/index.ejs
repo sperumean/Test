@@ -5,6 +5,16 @@
 </head>
 <body>
   <h1>Welcome to the Reservation System</h1>
-  <p><a href="/login">Login</a> | <a href="/register">Sign Up</a></p>
+  <% if (req.session && req.session.userId) { %>
+    <p>You are logged in.</p>
+    <a href="/reservation">Make a Reservation</a>
+    <br>
+    <a href="/logout">Logout</a>
+  <% } else { %>
+    <p>Please log in or sign up to make a reservation.</p>
+    <a href="/login">Login</a>
+    <br>
+    <a href="/register">Sign Up</a>
+  <% } %>
 </body>
 </html>
