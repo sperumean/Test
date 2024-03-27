@@ -65,7 +65,7 @@
       <div>
       </div>
       <div>
-        <label for="note">Note:</label>
+        <label for="note">Number or Name of the contact:</label>
         <textarea id="note" name="note"></textarea>
       </div>
 
@@ -75,7 +75,17 @@
   <select id="department" name="department" required>
     <option value="">Select a department</option>
     <option value="Arts and Sciences">Arts and Sciences</option>
-    <!-- Add other departments here -->
+    <option value="Behavioral and Social Sciences">Behavioral and Social Sciences</option>
+    <option value="Business">Business</option>
+    <option value="CAVAD">CAVAD</option>
+    <option value="Christian Ministries">Christian Ministries</option>
+    <option value="Commencement">Commencement</option>
+    <option value="Community Life">Community Life</option>
+    <option value="Education">Education</option>
+    <option value="Engineering">Engineering</option>
+    <option value="Health Science">Health Science</option>
+    <option value="Nursing">Nursing</option>
+    <option value="Performing Arts">Performing Arts</option>
     <option value="Spiritual Life">Spiritual Life</option>
     <option value="Other">Other</option>
   </select>
@@ -84,21 +94,36 @@
 <div>
 </div>
 
+
 <div>
   <label for="location">Location:</label>
   <select id="location" name="location" required>
     <option value="">Select a location</option>
     <option value="Community Life Lounge">Community Life Lounge</option>
-    <!-- Add other locations here -->
+    <option value="Copenbarger">Copenbarger</option>
+    <option value="Events Center (Inside)">Events Center (Inside)</option>
+    <option value="Events Center (Outside)">Events Center (Outside)</option>
+    <option value="Front Lawn">Front Lawn</option>
+    <option value="Great Commission Plaza (Kugel)">Great Commission Plaza (Kugel)</option>
+    <option value="Harden Square">Harden Square</option>
+    <option value="Innovators Auditorium">Innovators Auditorium</option>
+    <option value="Lancer Plaza Courtyard">Lancer Plaza Courtyard</option>
+    <option value="Stamps Courtyard">Stamps Courtyard</option>
+    <option value="Staples Room">Staples Room</option>
+    <option value="Wallace Theater (Outside)">Wallace Theater (Outside)</option>
     <option value="Wallace Theater (Inside)">Wallace Theater (Inside)</option>
   </select>
 </div>
+
 
 <div>
   <label for="pr5000Time">Time you want the PR5000:</label>
   <input type="text" id="pr5000Time" name="pr5000Time" placeholder="i.e. 11am to 5pm" required>
 </div>
+</div>
+
       <button type="submit">Reserve</button>
+</div>
 
 
     <% if (isAdmin) { %>
