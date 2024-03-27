@@ -181,14 +181,35 @@ app.post('/reserve', requireAuth, (req, res) => {
 
   // Save the reservation to the database
   reservation.save()
-    .then(() => {
-      res.render('success');
+    .then((savedReservation) => {
+      // Redirect to a route that shows the reservation details
+      res.redirect(`/reservation-success/${savedReservation._id}`);
     })
     .catch(err => {
       console.error('Error saving reservation:', err);
       res.render('error');
     });
 });
+
+
+// Route for showing reservation success and details
+app.get('/reservation-success/:id', requireAuth, (req, res) => {
+  const reservationId = req.params.id;
+
+  Reservation.findById(reservationId)
+    .then(reservation => {
+      if (!reservation) {
+        return res.status(404).send('Reservation not found');
+      }
+      // Render a success template with reservation details
+      res.render('success', { reservation });
+    })
+    .catch(err => {
+      console.error('Error fetching reservation:', err);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
 
 // Retrieve reservation data (admin only)
 app.get('/reservations', requireAuth, (req, res) => {

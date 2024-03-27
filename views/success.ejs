@@ -2,9 +2,47 @@
 <html>
 <head>
   <title>Reservation Successful</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 3px;
+    }
+    a:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-  <h1>Reservation Successful</h1>
-  <p>Your reservation has been successfully submitted.</p>
+  <div class="container">
+    <h1>Reservation Successful</h1>
+    <p>Your reservation for <strong><%= reservation.location %></strong> on <strong><%= reservation.date.toDateString() %></strong> at <strong><%= reservation.time %></strong> has been successfully submitted.</p>
+    <p>Note: <%= reservation.note %></p>
+    <a href="/reservation">Make another reservation</a>
+    <!-- Optionally, include a link to view all reservations if the user is an admin -->
+    <% if (req.session.isAdmin) { %>
+      <a href="/reservations">View all reservations</a>
+    <% } %>
+  </div>
 </body>
 </html>
