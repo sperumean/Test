@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Reservations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    .reservations-container {
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin: auto;
+      width: fit-content;
+      text-align: center;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #ccc;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="reservations-container">
+    <h1>All Reservations</h1>
+    <% if (reservations.length > 0) { %>
+      <ul>
+        <% reservations.forEach(function(reservation) { %>
+          <li>
+            <strong>Date:</strong> <%= new Date(reservation.date).toDateString() %><br>
+            <strong>Time:</strong> <%= reservation.time %><br>
+            <strong>Location:</strong> <%= reservation.location %><br>
+            <strong>Note:</strong> <%= reservation.note %>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>No reservations found.</p>
+    <% } %>
+    <a href="/">Back to home</a>
+  </div>
+</body>
+</html>
+
