@@ -69,6 +69,7 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 
+
 // Handle user login
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
@@ -77,7 +78,7 @@ app.post('/login', (req, res) => {
     .then(user => {
       if (!user) {
         // User not found
-        return res.status(401).send('Invalid email or password');
+        return res.render('login', { error: 'Invalid email or password' });
       }
 
       // Compare the provided password with the stored hashed password
@@ -89,7 +90,7 @@ app.post('/login', (req, res) => {
           res.redirect('/reservation');
         } else {
           // Password is incorrect
-          res.status(401).send('Invalid email or password');
+          res.render('login', { error: 'Invalid email or password' });
         }
       });
     })
@@ -114,6 +115,11 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
+// Serve the index.html file for the root route
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
+
 // Handle user registration
 app.post('/register', (req, res) => {
   const { email, password } = req.body;
@@ -123,7 +129,7 @@ app.post('/register', (req, res) => {
     .then(existingUser => {
       if (existingUser) {
         // User already exists
-        return res.status(400).send('Email is already registered');
+        return res.render('register', { error: 'Email is already registered' });
       }
 
       // Hash the password
@@ -156,7 +162,6 @@ app.post('/register', (req, res) => {
       res.status(500).send('Internal Server Error');
     });
 });
-
 // Render the reservation form
 app.get('/reservation', requireAuth, (req, res) => {
   res.render('reservation');
@@ -205,8 +210,5 @@ app.get('/reservations', requireAuth, (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-
-
 
 
