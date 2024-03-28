@@ -47,8 +47,18 @@
           <li>
             <strong>Date:</strong> <%= new Date(reservation.date).toDateString() %><br>
             <strong>Time:</strong> <%= reservation.time %><br>
+            <strong>Department:</strong> <%= reservation.department %><br>
+            <strong>Contact:</strong> <%= reservation.contact %><br>
             <strong>Location:</strong> <%= reservation.location %><br>
-            <strong>Note:</strong> <%= reservation.note %>
+            <strong>Event Start Time:</strong> <%= reservation.eventStartTime %><br>
+            <strong>PR5000 Time:</strong> <%= reservation.pr5000Time %><br>
+            <strong>Note:</strong> <%= reservation.note %><br>
+            <strong>Re-entry:</strong> <%= reservation.reentry %><br>
+            <strong>Population Limit:</strong> <%= reservation.populationLimit ? 'Yes' : 'No' %><br>
+            <% if (reservation.populationLimit) { %>
+              <strong>Population Description:</strong> <%= reservation.populationDesc %><br>
+            <% } %>
+            <strong>Number of Scanners:</strong> <%= reservation.scanners %>
           </li>
         <% }); %>
       </ul>
@@ -59,4 +69,3 @@
   </div>
 </body>
 </html>
-

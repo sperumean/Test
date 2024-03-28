@@ -35,15 +35,29 @@
 </head>
 <body>
   <div class="container">
-    <h1>Reservation Successful</h1>
-    <p>Your reservation for <strong><%= reservation.location %></strong> on <strong><%= reservation.date.toDateString() %></strong> at <strong><%= reservation.time %></strong> has been successfully submitted.</p>
-    <p>Note: <%= reservation.note %></p>
-    <a href="/reservation">Make another reservation</a>
-    <!-- Optionally, include a link to view all reservations if the user is an admin -->
+    <h2>Reservation Successful</h2>
+    <p>Your reservation has been successfully submitted.</p>
+    <h3>Reservation Details:</h3>
+    <ul>
+      <li><strong>Date:</strong> <%= reservation.date %></li>
+      <li><strong>Time:</strong> <%= reservation.time %></li>
+      <li><strong>Department:</strong> <%= reservation.department %></li>
+      <li><strong>Contact:</strong> <%= reservation.contact %></li>
+      <li><strong>Location:</strong> <%= reservation.location %></li>
+      <li><strong>Event Start Time:</strong> <%= reservation.eventStartTime %></li>
+      <li><strong>PR5000 Time:</strong> <%= reservation.pr5000Time %></li>
+      <li><strong>Note:</strong> <%= reservation.note %></li>
+      <li><strong>Re-entry:</strong> <%= reservation.reentry %></li>
+      <li><strong>Population Limit:</strong> <%= reservation.populationLimit ? 'Yes' : 'No' %></li>
+      <% if (reservation.populationLimit) { %>
+        <li><strong>Population Description:</strong> <%= reservation.populationDesc %></li>
+      <% } %>
+      <li><strong>Number of Scanners:</strong> <%= reservation.scanners %></li>
+    </ul>
+    <a href="/reservation" class="button-like-link">Make Another Reservation</a>
     <% if (isAdmin) { %>
-      <a href="/reservations">View all reservations</a>
+      <a href="/reservations" class="button-like-link">View All Reservations</a>
     <% } %>
-    <a href="/logout" style="display: inline-block; margin-top: 20px; padding: 10px; background-color: #4CAF50; color: #ffffff; text-decoration: none; border-radius: 3px;">Logout</a>
   </div>
 </body>
 </html>
