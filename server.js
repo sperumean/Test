@@ -27,6 +27,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
 // Define the reservation schema
+const reservationSchema = new mongoose.Schema({
   date: Date,
   time: String,
   department: String,
@@ -35,13 +36,11 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   eventStartTime: String,
   pr5000Time: String,
   note: String,
-  reentry: String, // Make sure this line ends with a comma if it's not the last item
+  reentry: String,
   populationLimit: Boolean,
   populationDesc: String,
   scanners: Number
 });
-
-
 
 // Create the reservation model
 const Reservation = mongoose.model('Reservation', reservationSchema);
@@ -77,7 +76,6 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
   res.render('login');
 });
-
 
 // Handle user login
 app.post('/login', (req, res) => {
@@ -181,8 +179,8 @@ app.get('/reservation', requireAuth, (req, res) => {
   res.render('reservation', { isAdmin });
 });
 
-
 // Handle form submission
+
 app.post('/reserve', requireAuth, (req, res) => {
   const {
     date,
@@ -201,7 +199,7 @@ app.post('/reserve', requireAuth, (req, res) => {
 
   // Here you can handle the boolean conversion for populationLimit
   const isPopulationLimit = populationLimit === 'yes';
-  
+
   // Create a new reservation with all the fields
   const reservation = new Reservation({
     date,
@@ -229,8 +227,6 @@ app.post('/reserve', requireAuth, (req, res) => {
       res.status(500).render('error', { message: 'Error saving reservation.' });
     });
 });
-
-
 
 // Route for showing reservation success and details
 app.get('/reservation-success/:id', requireAuth, (req, res) => {
@@ -268,9 +264,48 @@ app.get('/reservations', requireAuth, (req, res) => {
   }
 });
 
+// Retrieve reservation data for the calendar
+// Retrieve reservation data for the calendar
+// Retrieve reservation data for the calendar
+app.get('/reservations/calendar', requireAuth, (req, res) => {
+  Reservation.find()
+    .then(reservations => {
+      const events = reservations.map(reservation => ({
+        start: reservation.date,
+        time: reservation.time,
+        title: reservation.department
+      }));
+      res.json(events);
+    })
+    .catch(err => {
+      console.error('Error fetching reservations:', err);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
+// Route for fetching availability data
+app.get('/availability', (req, res) => {
+  const { startDate, endDate } = req.query;
+
+  Reservation.find({
+    startDate: { $lte: endDate },
+    endDate: { $gte: startDate }
+  })
+    .then(reservations => {
+      // Calculate the total quantity reserved for each day
+      const availability = {};
+      // Logic to populate the availability object
+
+      res.json(availability);
+    })
+    .catch(err => {
+      console.error('Error fetching availability:', err);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
 
