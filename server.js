@@ -27,7 +27,6 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
 // Define the reservation schema
-const reservationSchema = new mongoose.Schema({
   date: Date,
   time: String,
   department: String,
@@ -35,7 +34,11 @@ const reservationSchema = new mongoose.Schema({
   location: String,
   eventStartTime: String,
   pr5000Time: String,
-  note: String
+  note: String,
+  reentry: String, // Make sure this line ends with a comma if it's not the last item
+  populationLimit: Boolean,
+  populationDesc: String,
+  scanners: Number
 });
 
 
