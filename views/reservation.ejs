@@ -17,8 +17,18 @@
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       padding: 30px;
-      width: 300px;
+      width: 400px;
       text-align: center;
+    }
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 5px;
+      font-weight: bold;
     }
     input[type="date"],
     input[type="time"],
@@ -29,8 +39,13 @@
       margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 3px;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
     }
-    button {
+    button,
+    .button-like-link {
+      display: inline-block;
       width: 100%;
       padding: 10px;
       background-color: #4CAF50;
@@ -38,14 +53,37 @@
       border: none;
       border-radius: 3px;
       cursor: pointer;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      margin-top: 10px;
     }
-    button:hover {
+    button:hover,
+    .button-like-link:hover {
       background-color: #45a049;
     }
     img {
       max-width: 100%;
       height: auto;
       margin-bottom: 15px;
+    }
+    p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    .radio-group {
+      text-align: left;
+      margin-bottom: 10px;
+    }
+    .radio-group label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .note {
+      font-size: 12px;
+      color: #888;
+      margin-top: 5px;
+      text-align: left;
     }
   </style>
 </head>
@@ -63,134 +101,100 @@
         <input type="time" id="time" name="time" required>
       </div>
       <div>
+        <label for="department">Department:</label>
+        <select id="department" name="department" required>
+          <option value="">Select a department</option>
+          <option value="Arts and Sciences">Arts and Sciences</option>
+          <option value="Behavioral and Social Sciences">Behavioral and Social Sciences</option>
+          <option value="Business">Business</option>
+          <option value="CAVAD">CAVAD</option>
+          <option value="Christian Ministries">Christian Ministries</option>
+          <option value="Commencement">Commencement</option>
+          <option value="Community Life">Community Life</option>
+          <option value="Education">Education</option>
+          <option value="Engineering">Engineering</option>
+          <option value="Health Science">Health Science</option>
+          <option value="Nursing">Nursing</option>
+          <option value="Performing Arts">Performing Arts</option>
+          <option value="Spiritual Life">Spiritual Life</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="location">Location:</label>
+        <select id="location" name="location" required>
+          <option value="">Select a location</option>
+          <option value="Community Life Lounge">Community Life Lounge</option>
+          <option value="Copenbarger">Copenbarger</option>
+          <option value="Events Center (Inside)">Events Center (Inside)</option>
+          <option value="Events Center (Outside)">Events Center (Outside)</option>
+          <option value="Front Lawn">Front Lawn</option>
+          <option value="Great Commission Plaza (Kugel)">Great Commission Plaza (Kugel)</option>
+          <option value="Harden Square">Harden Square</option>
+          <option value="Innovators Auditorium">Innovators Auditorium</option>
+          <option value="Lancer Plaza Courtyard">Lancer Plaza Courtyard</option>
+          <option value="Stamps Courtyard">Stamps Courtyard</option>
+          <option value="Staples Room">Staples Room</option>
+          <option value="Wallace Theater (Outside)">Wallace Theater (Outside)</option>
+          <option value="Wallace Theater (Inside)">Wallace Theater (Inside)</option>
+        </select>
+      </div>
+      <div>
+        <label>Do you want to allow re-entry or deny re-entry to this event?</label>
+        <div class="radio-group">
+          <input type="radio" id="allowReentry" name="reentry" value="allow" required>
+          <label for="allowReentry">Allow Re-Entry</label>
+        </div>
+        <div class="radio-group">
+          <input type="radio" id="denyReentry" name="reentry" value="deny" required>
+          <label for="denyReentry">Deny Re-Entry</label>
+        </div>
+        <p class="note">PLEASE NOTE:<br>
+          * Allow Re-Entry = Track attendance.<br>
+          * Deny Re-Entry = One time entrance (i.e. meal, giveaway)
+        </p>
+      </div>
+      <div>
+        <label>Is there a particular population that you want to limit the event to?</label>
+        <div class="radio-group">
+          <input type="radio" id="populationYes" name="populationLimit" value="yes" required>
+          <label for="populationYes">Yes</label>
+          <input type="radio" id="populationNo" name="populationLimit" value="no" required>
+          <label for="populationNo">No</label>
+        </div>
+        <div id="populationDescription" style="display:none;">
+          <label for="populationDesc">Describe the population:</label>
+          <textarea id="populationDesc" name="populationDesc"></textarea>
+        </div>
+      </div>
+      <div>
+        <label for="scanners">Number of Scanners Requested:</label>
+        <select id="scanners" name="scanners" required>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
       </div>
       <div>
         <label for="note">Time you want the PR5000 or any other information?:</label>
         <textarea id="note" name="note"></textarea>
       </div>
-
-<!-- Inside your form in reservation.ejs -->
-<div>
-  <label for="department">Department:</label>
-  <select id="department" name="department" required>
-    <option value="">Select a department</option>
-    <option value="Arts and Sciences">Arts and Sciences</option>
-    <option value="Behavioral and Social Sciences">Behavioral and Social Sciences</option>
-    <option value="Business">Business</option>
-    <option value="CAVAD">CAVAD</option>
-    <option value="Christian Ministries">Christian Ministries</option>
-    <option value="Commencement">Commencement</option>
-    <option value="Community Life">Community Life</option>
-    <option value="Education">Education</option>
-    <option value="Engineering">Engineering</option>
-    <option value="Health Science">Health Science</option>
-    <option value="Nursing">Nursing</option>
-    <option value="Performing Arts">Performing Arts</option>
-    <option value="Spiritual Life">Spiritual Life</option>
-    <option value="Other">Other</option>
-  </select>
-</div>
-
-<div>
-</div>
-
-
-<div>
-  <label for="location">Location:</label>
-  <select id="location" name="location" required>
-    <option value="">Select a location</option>
-    <option value="Community Life Lounge">Community Life Lounge</option>
-    <option value="Copenbarger">Copenbarger</option>
-    <option value="Events Center (Inside)">Events Center (Inside)</option>
-    <option value="Events Center (Outside)">Events Center (Outside)</option>
-    <option value="Front Lawn">Front Lawn</option>
-    <option value="Great Commission Plaza (Kugel)">Great Commission Plaza (Kugel)</option>
-    <option value="Harden Square">Harden Square</option>
-    <option value="Innovators Auditorium">Innovators Auditorium</option>
-    <option value="Lancer Plaza Courtyard">Lancer Plaza Courtyard</option>
-    <option value="Stamps Courtyard">Stamps Courtyard</option>
-    <option value="Staples Room">Staples Room</option>
-    <option value="Wallace Theater (Outside)">Wallace Theater (Outside)</option>
-    <option value="Wallace Theater (Inside)">Wallace Theater (Inside)</option>
-  </select>
-</div>
-
-<div>
-  <label>Do you want to allow re-entry or deny re-entry to this event?</label>
-  <p>
-    <input type="radio" id="allowReentry" name="reentry" value="allow" required>
-    <label for="allowReentry">Allow Re-Entry</label>
-  </p>
-  <p>
-    <input type="radio" id="denyReentry" name="reentry" value="deny" required>
-    <label for="denyReentry">Deny Re-Entry</label>
-  </p>
-  <p>PLEASE NOTE:<br>
-    * Allow Re-Entry is if you are wanting to simply track attendance.<br>
-    * Deny Re-Entry is for something that you only want to allow them to do once (i.e. meal, giveaway)
-  </p>
-</div>
-
-<div>
-  <label>Is there a particular population that you want to limit the event to?</label>
-  <p>
-    <input type="radio" id="populationYes" name="populationLimit" value="yes" required>
-    <label for="populationYes">Yes</label>
-    <input type="radio" id="populationNo" name="populationLimit" value="no" required>
-    <label for="populationNo">No</label>
-  </p>
-  <div id="populationDescription" style="display:none;">
-    <label for="populationDesc">Describe the population:</label>
-    <textarea id="populationDesc" name="populationDesc"></textarea>
+      <button type="submit">Reserve</button>
+    </form>
+    <% if (isAdmin) { %>
+      <a href="/reservations" class="button-like-link">View All Reservations</a>
+    <% } %>
   </div>
-</div>
-
-<div>
-  <label for="scanners">Number of Scanners Requested:</label>
-  <select id="scanners" name="scanners" required>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-  </select>
-</div>
-
-<script>
-  // You can use this script to toggle the display of the population description field
-  document.getElementById('populationYes').addEventListener('change', function() {
-    document.getElementById('populationDescription').style.display = 'block';
-  });
-  document.getElementById('populationNo').addEventListener('change', function() {
-    document.getElementById('populationDescription').style.display = 'none';
-  });
-</script>
-
-
-
-
-    <div>
-    </div>
-    <button type="submit">Reserve</button>
-  </form>
-  <% if (isAdmin) { %>
-    <a href="/reservations" class="button-like-link">View All Reservations</a>
-  <% } %>
-</div>
-
-<style>
-  /* Additional styles to make the link look like a button */
-  .button-like-link {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-</style>
+  
+  <script>
+    // You can use this script to toggle the display of the population description field
+    document.getElementById('populationYes').addEventListener('change', function() {
+      document.getElementById('populationDescription').style.display = 'block';
+    });
+    document.getElementById('populationNo').addEventListener('change', function() {
+      document.getElementById('populationDescription').style.display = 'none';
+    });
+  </script>
 </body>
 </html>
-
-
