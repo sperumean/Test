@@ -51,21 +51,21 @@
 </head>
 <body>
   <div class="container">
-    <h2>Reservation Form</h2>
+    <h2>PR5000 Reservation Form</h2>
     <form action="/reserve" method="POST">
       <img src="https://encoura.org/wp-content/uploads/2021/02/cbu.png" alt="Item Image">
       <div>
-        <label for="date">Date:</label>
+        <label for="date">Date of the Event:</label>
         <input type="date" id="date" name="date" required>
       </div>
       <div>
-        <label for="time">Time:</label>
+        <label for="time">Time of the Event:</label>
         <input type="time" id="time" name="time" required>
       </div>
       <div>
       </div>
       <div>
-        <label for="note">Number or Name of the contact:</label>
+        <label for="note">Time you want the PR5000 or any other information?:</label>
         <textarea id="note" name="note"></textarea>
       </div>
 
@@ -115,11 +115,60 @@
   </select>
 </div>
 
+<div>
+  <label>Do you want to allow re-entry or deny re-entry to this event?</label>
+  <p>
+    <input type="radio" id="allowReentry" name="reentry" value="allow" required>
+    <label for="allowReentry">Allow Re-Entry</label>
+  </p>
+  <p>
+    <input type="radio" id="denyReentry" name="reentry" value="deny" required>
+    <label for="denyReentry">Deny Re-Entry</label>
+  </p>
+  <p>PLEASE NOTE:<br>
+    * Allow Re-Entry is if you are wanting to simply track attendance.<br>
+    * Deny Re-Entry is for something that you only want to allow them to do once (i.e. meal, giveaway)
+  </p>
+</div>
+
+<div>
+  <label>Is there a particular population that you want to limit the event to?</label>
+  <p>
+    <input type="radio" id="populationYes" name="populationLimit" value="yes" required>
+    <label for="populationYes">Yes</label>
+    <input type="radio" id="populationNo" name="populationLimit" value="no" required>
+    <label for="populationNo">No</label>
+  </p>
+  <div id="populationDescription" style="display:none;">
+    <label for="populationDesc">Describe the population:</label>
+    <textarea id="populationDesc" name="populationDesc"></textarea>
+  </div>
+</div>
+
+<div>
+  <label for="scanners">Number of Scanners Requested:</label>
+  <select id="scanners" name="scanners" required>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+  </select>
+</div>
+
+<script>
+  // You can use this script to toggle the display of the population description field
+  document.getElementById('populationYes').addEventListener('change', function() {
+    document.getElementById('populationDescription').style.display = 'block';
+  });
+  document.getElementById('populationNo').addEventListener('change', function() {
+    document.getElementById('populationDescription').style.display = 'none';
+  });
+</script>
+
+
 
 
     <div>
-      <label for="pr5000Time">Time you want the PR5000:</label>
-      <input type="text" id="pr5000Time" name="pr5000Time" placeholder="i.e. 11am to 5pm" required style="margin-bottom: 20px;">
     </div>
     <button type="submit">Reserve</button>
   </form>

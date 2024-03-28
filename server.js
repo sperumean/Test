@@ -181,9 +181,25 @@ app.get('/reservation', requireAuth, (req, res) => {
 
 // Handle form submission
 app.post('/reserve', requireAuth, (req, res) => {
-  const { date, time, department, contact, location, eventStartTime, pr5000Time, note } = req.body;
+  const {
+    date,
+    time,
+    department,
+    contact,
+    location,
+    eventStartTime,
+    pr5000Time,
+    note,
+    reentry,
+    populationLimit,
+    populationDesc,
+    scanners
+  } = req.body;
 
-  // Create a new reservation with the additional fields
+  // Here you can handle the boolean conversion for populationLimit
+  const isPopulationLimit = populationLimit === 'yes';
+  
+  // Create a new reservation with all the fields
   const reservation = new Reservation({
     date,
     time,
@@ -192,19 +208,25 @@ app.post('/reserve', requireAuth, (req, res) => {
     location,
     eventStartTime,
     pr5000Time,
-    note
+    note,
+    reentry,
+    populationLimit: isPopulationLimit,
+    populationDesc: isPopulationLimit ? populationDesc : '', // Only save if populationLimit is true
+    scanners: parseInt(scanners, 10) // Ensure scanners is stored as a number
   });
 
   // Save the reservation to the database
   reservation.save()
-    .then((savedReservation) => {
+    .then(savedReservation => {
+      // Redirect to a success route with the reservation's ID
       res.redirect(`/reservation-success/${savedReservation._id}`);
     })
     .catch(err => {
       console.error('Error saving reservation:', err);
-      res.render('error');
+      res.status(500).render('error', { message: 'Error saving reservation.' });
     });
 });
+
 
 
 // Route for showing reservation success and details
