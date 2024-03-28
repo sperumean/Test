@@ -189,21 +189,6 @@
   </div>
 
 
-  <div>
-    <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" name="startDate" required>
-  </div>
-
-  <div>
-    <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" name="endDate" required>
-  </div>
-
-  <div>
-    <label for="quantity">Number of PR5000s:</label>
-    <input type="number" id="quantity" name="quantity" min="1" max="4" required>
-  </div>
-
 <div id="calendar"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
@@ -213,11 +198,14 @@
     const calendar = new FullCalendar.Calendar(calendarEl, {
       // Calendar configuration options
       events: function(info, successCallback, failureCallback) {
-        fetch(`/availability?startDate=${info.startStr}&endDate=${info.endStr}`)
+        fetch(`/reservations/calendar?start=${info.startStr}&end=${info.endStr}`)
           .then(response => response.json())
           .then(data => {
-            const events = [];
-            // Logic to convert availability data into calendar events
+            const events = data.map(reservation => ({
+              title: reservation.department,
+              start: reservation.date,
+              // Add any other relevant reservation details to display on the calendar
+            }));
             successCallback(events);
           })
           .catch(error => {
@@ -228,7 +216,6 @@
     calendar.render();
   });
 </script>
-
 
   <script>
     // You can use this script to toggle the display of the population description field
