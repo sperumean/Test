@@ -252,6 +252,7 @@ app.get('/reservation-success/:id', requireAuth, (req, res) => {
 app.get('/reservations', requireAuth, (req, res) => {
   if (req.session.isAdmin) {
     Reservation.find()
+      .populate('user', 'email')
       .then(reservations => {
         res.render('reservations', { reservations });
       })
@@ -263,7 +264,6 @@ app.get('/reservations', requireAuth, (req, res) => {
     res.status(403).send('Access denied');
   }
 });
-
 // Retrieve reservation data for the calendar
 // Retrieve reservation data for the calendar
 // Retrieve reservation data for the calendar
