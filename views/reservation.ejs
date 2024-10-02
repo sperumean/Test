@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Reservation Form</title>
+  <title>Workout Reservation Form</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -86,78 +86,77 @@
       text-align: left;
     }
 
-/* Style for the "Today" button */
-.fc-today-button {
-  background-color: #4CAF50 !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 3px !important;
-  padding: 6px 12px !important;
-  font-size: 14px !important;
-  cursor: pointer !important;
-}
+    /* Style for the "Today" button */
+    .fc-today-button {
+      background-color: #4CAF50 !important;
+      color: #ffffff !important;
+      border: none !important;
+      border-radius: 3px !important;
+      padding: 6px 12px !important;
+      font-size: 14px !important;
+      cursor: pointer !important;
+    }
 
-.fc-today-button:hover {
-  background-color: #45a049 !important;
-}
+    .fc-today-button:hover {
+      background-color: #45a049 !important;
+    }
 
-/* Style for the previous and next month buttons */
-.fc-prev-button,
-.fc-next-button {
-  background-color: #4CAF50 !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 3px !important;
-  padding: 6px 12px !important;
-  font-size: 14px !important;
-  cursor: pointer !important;
-}
+    /* Style for the previous and next month buttons */
+    .fc-prev-button,
+    .fc-next-button {
+      background-color: #4CAF50 !important;
+      color: #ffffff !important;
+      border: none !important;
+      border-radius: 3px !important;
+      padding: 6px 12px !important;
+      font-size: 14px !important;
+      cursor: pointer !important;
+    }
 
-.fc-prev-button:hover,
-.fc-next-button:hover {
-  background-color: #45a049 !important;
-}
+    .fc-prev-button:hover,
+    .fc-next-button:hover {
+      background-color: #45a049 !important;
+    }
 
-/* Positioning for the buttons */
-.fc-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
+    /* Positioning for the buttons */
+    .fc-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
-.fc-left,
-.fc-center,
-.fc-right {
-  display: flex;
-  align-items: center;
-}
+    .fc-left,
+    .fc-center,
+    .fc-right {
+      display: flex;
+      align-items: center;
+    }
 
-.fc-left > *,
-.fc-center > *,
-.fc-right > * {
-  margin: 0 5px;
-}
+    .fc-left > *,
+    .fc-center > *,
+    .fc-right > * {
+      margin: 0 5px;
+    }
 
-
-a.button-like-link {
-  display: inline-block;
-  width: 150px; /* Adjust this value to your desired width */
-  padding: 8px 16px; /* Adjust padding as needed */
-  background-color: #4CAF50;
-  color: #ffffff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  text-decoration: none;
-  font-family: Arial, sans-serif;
-  font-size: 14px; /* Adjust font size if needed */
-  margin-top: 10px;
-  text-align: center;
-}
-a.button-like-link:hover {
-  background-color: #45a049;
-}
+    a.button-like-link {
+      display: inline-block;
+      width: 150px; /* Adjust this value to your desired width */
+      padding: 8px 16px; /* Adjust padding as needed */
+      background-color: #4CAF50;
+      color: #ffffff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 14px; /* Adjust font size if needed */
+      margin-top: 10px;
+      text-align: center;
+    }
+    a.button-like-link:hover {
+      background-color: #45a049;
+    }
     .spin-wheel-button {
       position: fixed;
       top: 20px;
@@ -171,96 +170,76 @@ a.button-like-link:hover {
 <body>
   <a href="https://wheelycoolspin.netlify.app" target="_blank" class="button-like-link spin-wheel-button">Dynamic Spin Wheel</a>
   <div class="container">
-    <h2>PR5000 Reservation Form</h2>
+    <h2>Workout Reservation Form</h2>
     <form action="/reserve" method="POST">
-      <img src="https://encoura.org/wp-content/uploads/2021/02/cbu.png" alt="Item Image">
+      <img src="https://encoura.org/wp-content/uploads/2021/02/cbu.png" alt=" ">
       <div>
         <label for="date">Date of the Event:</label>
         <input type="date" id="date" name="date" required>
       </div>
       <div>
-        <label for="time">Time of the Event:</label>
+        <label for="time">Preferred Time of Appointment:</label>
         <input type="time" id="time" name="time" required>
       </div>
       <div>
-        <label for="department">Department:</label>
-        <select id="department" name="department" required>
-          <option value="">Select a department</option>
-          <option value="Arts and Sciences">Arts and Sciences</option>
-          <option value="Behavioral and Social Sciences">Behavioral and Social Sciences</option>
-          <option value="Business">Business</option>
-          <option value="CAVAD">CAVAD</option>
-          <option value="Christian Ministries">Christian Ministries</option>
-          <option value="Commencement">Commencement</option>
-          <option value="Community Life">Community Life</option>
-          <option value="Education">Education</option>
-          <option value="Engineering">Engineering</option>
-          <option value="Health Science">Health Science</option>
-          <option value="Nursing">Nursing</option>
-          <option value="Performing Arts">Performing Arts</option>
-          <option value="Spiritual Life">Spiritual Life</option>
+        <label for="goals">What are your goals?</label>
+        <select id="goals" name="goals" required>
+          <option value="">Select your goal</option>
+          <option value="Strength">Strength</option>
+          <option value="Weight Loss">Weight Loss</option>
           <option value="Other">Other</option>
         </select>
       </div>
       <div>
-        <label for="location">Location:</label>
-        <select id="location" name="location" required>
-          <option value="">Select a location</option>
-          <option value="Community Life Lounge">Community Life Lounge</option>
-          <option value="Copenbarger">Copenbarger</option>
-          <option value="Events Center (Inside)">Events Center (Inside)</option>
-          <option value="Events Center (Outside)">Events Center (Outside)</option>
-          <option value="Front Lawn">Front Lawn</option>
-          <option value="Great Commission Plaza (Kugel)">Great Commission Plaza (Kugel)</option>
-          <option value="Harden Square">Harden Square</option>
-          <option value="Innovators Auditorium">Innovators Auditorium</option>
-          <option value="Lancer Plaza Courtyard">Lancer Plaza Courtyard</option>
-          <option value="Stamps Courtyard">Stamps Courtyard</option>
-          <option value="Staples Room">Staples Room</option>
-          <option value="Wallace Theater (Outside)">Wallace Theater (Outside)</option>
-          <option value="Wallace Theater (Inside)">Wallace Theater (Inside)</option>
+        <label for="timeslot">Time Slots:</label>
+        <select id="timeslot" name="timeslot" required>
+          <option value="">Select a time slot</option>
+          <option value="8am - 10am">8am - 10am</option>
+          <option value="10am - 12pm">10am - 12pm</option>
+          <option value="1pm - 3pm">1pm - 3pm</option>
+          <option value="3pm - 5pm">3pm - 5pm</option>
         </select>
       </div>
       <div>
-        <label>Do you want to allow re-entry or deny re-entry to this event?</label>
+        <label>Do you want a follow-up email with a trainer?</label>
         <div class="radio-group">
-          <input type="radio" id="allowReentry" name="reentry" value="allow" required>
-          <label for="allowReentry">Allow Re-Entry</label>
+          <input type="radio" id="followUpYes" name="followUp" value="yes" required>
+          <label for="followUpYes">Yes, email me!</label>
         </div>
         <div class="radio-group">
-          <input type="radio" id="denyReentry" name="reentry" value="deny" required>
-          <label for="denyReentry">Deny Re-Entry</label>
-        </div>
-        <p class="note">PLEASE NOTE:<br>
-          * Allow Re-Entry = Track attendance.<br>
-          * Deny Re-Entry = One time entrance (i.e. meal, giveaway)
-        </p>
-      </div>
-      <div>
-        <label>Is there a particular population that you want to limit the event to?</label>
-        <div class="radio-group">
-          <input type="radio" id="populationYes" name="populationLimit" value="yes" required>
-          <label for="populationYes">Yes</label>
-          <input type="radio" id="populationNo" name="populationLimit" value="no" required>
-          <label for="populationNo">No</label>
-        </div>
-        <div id="populationDescription" style="display:none;">
-          <label for="populationDesc">Describe the population:</label>
-          <textarea id="populationDesc" name="populationDesc"></textarea>
+          <input type="radio" id="followUpNo" name="followUp" value="no" required>
+          <label for="followUpNo">No, do not email me.</label>
         </div>
       </div>
       <div>
-        <label for="scanners">Number of Scanners Requested:</label>
-        <select id="scanners" name="scanners" required>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+        <label>Have you trained with Cyber Viking before?</label>
+        <div class="radio-group">
+          <input type="radio" id="trainedYes" name="trainedBefore" value="yes" required>
+          <label for="trainedYes">Yes</label>
+          <input type="radio" id="trainedNo" name="trainedBefore" value="no" required>
+          <label for="trainedNo">No</label>
+        </div>
+        <div id="trainedDescription" style="display:none;">
+          <label for="trainedDesc">Please provide details:</label>
+          <textarea id="trainedDesc" name="trainedDesc"></textarea>
+        </div>
+      </div>
+      <div>
+        <label for="weightChange">How much weight would you like to gain or lose?</label>
+        <select id="weightChange" name="weightChange" required>
+          <option value="">Select an option</option>
+          <option value="-40+">-40+</option>
+          <option value="-20+">-20+</option>
+          <option value="-10+">-10+</option>
+          <option value="Maintain">Maintain</option>
+          <option value="+10">+10</option>
+          <option value="+20">+20</option>
+          <option value="+40">+40</option>
         </select>
       </div>
       <div>
-        <label for="note">Time you want the PR5000 or any other information?:</label>
-        <textarea id="note" name="note"></textarea>
+        <label for="preConditions">Do you want the trainer to know any pre-existing conditions?</label>
+        <textarea id="preConditions" name="preConditions"></textarea>
       </div>
       <button type="submit">Reserve</button>
     </form>
@@ -350,14 +329,13 @@ function formatTime(timeString) {
 </script>
 
   <script>
-    // You can use this script to toggle the display of the population description field
-    document.getElementById('populationYes').addEventListener('change', function() {
-      document.getElementById('populationDescription').style.display = 'block';
+    // Script to toggle the display of the trained before description field
+    document.getElementById('trainedYes').addEventListener('change', function() {
+      document.getElementById('trainedDescription').style.display = 'block';
     });
-    document.getElementById('populationNo').addEventListener('change', function() {
-      document.getElementById('populationDescription').style.display = 'none';
+    document.getElementById('trainedNo').addEventListener('change', function() {
+      document.getElementById('trainedDescription').style.display = 'none';
     });
   </script>
 </body>
 </html>
-
