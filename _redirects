@@ -1,14 +1,12 @@
 # Proxy specific API routes to the backend server
-/reserve            https://itsonlyfunifyoulive.duckdns.org:3000/reserve          200
-/login              https://itsonlyfunifyoulive.duckdns.org:3000/login            200
-/register           https://itsonlyfunifyoulive.duckdns.org:3000/register         200
-/logout             https://itsonlyfunifyoulive.duckdns.org:3000/logout           200
-/reservations/*     https://itsonlyfunifyoulive.duckdns.org:3000/reservations/:splat 200
-/reservations/calendar https://itsonlyfunifyoulive.duckdns.org:3000/reservations/calendar 200
-/availability       https://itsonlyfunifyoulive.duckdns.org:3000/availability     200
-
-# Catch-all for other API routes
-/api/*              https://itsonlyfunifyoulive.duckdns.org:3000/api/:splat       200
+/reserve            http://itsonlyfunifyoulive.duckdns.org:3000/reserve          200
+/login              http://itsonlyfunifyoulive.duckdns.org:3000/login            200
+/register           http://itsonlyfunifyoulive.duckdns.org:3000/register         200
+/logout             http://itsonlyfunifyoulive.duckdns.org:3000/logout           200
+/reservations/*     http://itsonlyfunifyoulive.duckdns.org:3000/reservations/:splat 200
+/reservations/calendar http://itsonlyfunifyoulive.duckdns.org:3000/reservations/calendar 200
+/availability       http://itsonlyfunifyoulive.duckdns.org:3000/availability       200
 
 # Serve all other routes with the frontend's index.html
-/*                  /index.html                                                   200
+/*                  /index.html                                              200
+                          200
