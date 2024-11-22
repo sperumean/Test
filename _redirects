@@ -1,3 +1,8 @@
 
 # Proxy all routes to the backend server
-/*    http://itsonlyfunifyoulive.duckdns.org:3000/:splat    200
+
+/* http://itsonlyfunifyoulive.duckdns.org:3000/:splat 200
+/login http://itsonlyfunifyoulive.duckdns.org:3000/login 200
+/register http://itsonlyfunifyoulive.duckdns.org:3000/register 200
+/reservation http://itsonlyfunifyoulive.duckdns.org:3000/reservation 200
+/reservations http://itsonlyfunifyoulive.duckdns.org:3000/reservations 200
