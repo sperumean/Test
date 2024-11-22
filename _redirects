@@ -1,2 +1,26 @@
-# Proxy all routes to the backend server
-/*    http://itsonlyfunifyoulive.duckdns.org:3000/:splat    200
+# netlify.toml
+[
+build
+]
+  command = "npm run build"  # or your build command
+  publish = "public"         # or your build output directory
+
+[[
+redirects
+]]
+  from = "/*"
+  to = "http://itsonlyfunifyoulive.duckdns.org:3000/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+[[
+headers
+]]
+  for = "/*"
+    [
+headers.values
+]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept"
