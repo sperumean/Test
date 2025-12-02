@@ -1,4 +1,4 @@
-
+sudo /opt/place_flags.sh "RED{eac0ef58602ef3d9}" "RED{93d0d6080b5f0078}" "RED{b27f8da343d19017}"
 # === DATABASE SETUP ===
 sudo mysql << 'EOF'
 CREATE DATABASE IF NOT EXISTS corporate;
