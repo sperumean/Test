@@ -1,388 +1,73 @@
 sudo tee /opt/setup_target.sh << 'SETUP'
 #!/bin/bash
-# RvB Target Setup - Creates realistic vulnerabilities
-
 echo "=== Setting up RvB Target Environment ==="
 
-# ============ WEB SERVER SETUP ============
+# Web server with vulnerable config
 sudo mkdir -p /var/www/html/{admin,.secret,includes}
 
-# Vulnerable PHP app with hardcoded creds
-sudo tee /var/www/html/index.php << 'EOF'
-<?php
-// TechCorp Internal Portal
-include('includes/config.php');
-?>
-<!DOCTYPE html>
-<html>
-<head><title>TechCorp Portal</title></head>
-<body>
-<h1>Welcome to TechCorp Internal Portal</h1>
-<p>Authorized personnel only.</p>
-<ul>
-  <li><a href="/admin/">Admin Panel</a></li>
-  <li><a href="/reports/">Reports</a></li>
-</ul>
-</body>
-</html>
-EOF
-
-# Config file with DB credentials (VULNERABILITY!)
 sudo tee /var/www/html/includes/config.php << 'EOF'
 <?php
-// Database configuration
-// TODO: Move to environment variables before production!
+// Database configuration - TODO: Move to env vars!
 $db_host = 'localhost';
 $db_user = 'webapp';
 $db_pass = 'Str0ngP@ss2024!';
 $db_name = 'corporate';
-
-// Debug mode - DISABLE IN PRODUCTION
-$debug = true;
 ?>
 EOF
 
-# Admin panel with backup file (VULNERABILITY!)
-sudo mkdir -p /var/www/html/admin
-sudo tee /var/www/html/admin/index.php << 'EOF'
-<?php
-session_start();
-if (!isset($_SESSION['admin'])) {
-    header('Location: login.php');
-    exit;
-}
-echo "<h1>Admin Dashboard</h1>";
-?>
-EOF
-
-# Old backup file left behind (VULNERABILITY!)
 sudo tee /var/www/html/admin/.login.php.bak << 'EOF'
 <?php
 // Old login - admin:TechCorp2024!
-// Moved to LDAP auth
 ?>
 EOF
 
-# ============ DATABASE SETUP ============
+# Database with passwords in plaintext
 sudo mysql << 'SQLEOF'
 DROP DATABASE IF EXISTS corporate;
 CREATE DATABASE corporate;
 USE corporate;
-
-CREATE TABLE customers (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100),
-    email VARCHAR(100),
-    ssn VARCHAR(20)
-);
-
-INSERT INTO customers VALUES 
-(1, 'John Smith', 'jsmith@techcorp.com', '123-45-6789'),
-(2, 'Jane Doe', 'jdoe@techcorp.com', '987-65-4321'),
-(3, 'Bob Wilson', 'bwilson@techcorp.com', '456-78-9012');
-
-CREATE TABLE secrets (
-    id INT PRIMARY KEY,
-    flag VARCHAR(100),
-    description VARCHAR(200)
-);
-
-CREATE TABLE users (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50),
-    password VARCHAR(100),
-    role VARCHAR(20)
-);
-
-INSERT INTO users VALUES
-(1, 'admin', 'TechCorp2024!', 'admin'),
-(2, 'webapp', 'Str0ngP@ss2024!', 'service'),
-(3, 'backup', 'BackupUser99', 'backup');
-
--- Create webapp user with password
+CREATE TABLE customers (id INT PRIMARY KEY, name VARCHAR(100), ssn VARCHAR(20));
+INSERT INTO customers VALUES (1, 'John Smith', '123-45-6789');
+CREATE TABLE secrets (id INT PRIMARY KEY, flag VARCHAR(100));
+CREATE TABLE users (id INT PRIMARY KEY, username VARCHAR(50), password VARCHAR(100));
+INSERT INTO users VALUES (1, 'admin', 'TechCorp2024!'), (2, 'webapp', 'Str0ngP@ss2024!');
 DROP USER IF EXISTS 'webapp'@'localhost';
 CREATE USER 'webapp'@'localhost' IDENTIFIED BY 'Str0ngP@ss2024!';
 GRANT ALL ON corporate.* TO 'webapp'@'localhost';
 FLUSH PRIVILEGES;
 SQLEOF
 
-# ============ SAMBA SETUP ============
+# Samba IT share with passwords
 sudo mkdir -p /srv/samba/{shared,confidential,IT}
-
-# Public shared folder
-sudo tee /srv/samba/shared/welcome.txt << 'EOF'
-Welcome to TechCorp File Server
-Please store project files in your department folder.
-EOF
-
-# IT folder with sensitive info (VULNERABILITY!)
 sudo tee /srv/samba/IT/server_passwords.txt << 'EOF'
-=== IT Department - Server Credentials ===
-DO NOT SHARE OUTSIDE IT TEAM
-
-Web Server SSH: webadmin / W3bAdm1n!
-Database Root: root / MySQLr00t2024
-Backup Server: backup / BackupUser99
-Service Account: webapp / Str0ngP@ss2024!
-
--- Updated by Mike, Jan 2024
+=== IT Server Credentials ===
+Web SSH: webadmin / W3bAdm1n!
+Database: webapp / Str0ngP@ss2024!
+Backup: backup / BackupUser99
 EOF
-
-sudo tee /srv/samba/IT/network_diagram.txt << 'EOF'
-Internal Network Map:
-- Web Server: 10.0.100.20
-- DB Server: 10.0.100.20 (same host)
-- File Server: 10.0.100.20 (same host)
-- Firewall: 10.0.100.1
-EOF
-
-# Samba config allowing guest to shared, auth for others
-sudo tee /etc/samba/smb.conf << 'EOF'
-[global]
-workgroup = TECHCORP
-server string = TechCorp File Server
-security = user
-map to guest = Bad User
-
-[shared]
-path = /srv/samba/shared
-browsable = yes
-writable = yes
-guest ok = yes
-
-[IT]
-path = /srv/samba/IT
-browsable = yes
-writable = no
-guest ok = yes
-comment = IT Department Files
-
-[confidential]
-path = /srv/samba/confidential
-browsable = yes
-writable = no
-guest ok = no
-valid users = admin
-EOF
-
 sudo chmod -R 755 /srv/samba
-sudo systemctl restart smbd
 
-# ============ USER SETUP ============
-# Create webapp user with breadcrumbs
-sudo useradd -m -s /bin/bash webapp 2>/dev/null || true
-echo "webapp:Str0ngP@ss2024!" | sudo chpasswd
-
-# Bash history with hints (VULNERABILITY!)
-sudo tee /home/webapp/.bash_history << 'EOF'
-mysql -u webapp -pStr0ngP@ss2024! corporate
-cd /var/www/html
-cat includes/config.php
-sudo systemctl restart apache2
-smbclient //localhost/IT -N
-cat /srv/samba/IT/server_passwords.txt
-EOF
-sudo chown webapp:webapp /home/webapp/.bash_history
-
-# ============ FLAG PLACEMENT SCRIPT ============
-sudo tee /opt/place_flags.sh << 'FLAGSCRIPT'
-#!/bin/bash
-# Usage: /opt/place_flags.sh <web_flag> <db_flag> <file_flag>
-
-WEB_FLAG=${1:-"RED{default_web}"}
-DB_FLAG=${2:-"RED{default_db}"}
-FILE_FLAG=${3:-"RED{default_file}"}
-
-# Web flag - in secret directory
-echo "$WEB_FLAG" | sudo tee /var/www/html/.secret/flag.txt > /dev/null
-sudo chmod 644 /var/www/html/.secret/flag.txt
-
-# DB flag - in secrets table
-sudo mysql -e "USE corporate; DELETE FROM secrets; INSERT INTO secrets VALUES (1, '$DB_FLAG', 'Database compromised');"
-
-# File flag - in confidential share
-echo "$FILE_FLAG" | sudo tee /srv/samba/confidential/flag.txt > /dev/null
-sudo chmod 644 /srv/samba/confidential/flag.txt
-
-echo "✓ Flags placed:"
-echo "  Web:  /var/www/html/.secret/flag.txt"
-echo "  DB:   SELECT * FROM corporate.secrets"
-echo "  File: /srv/samba/confidential/flag.txt"
-FLAGSCRIPT
-sudo chmod +x /opt/place_flags.sh
-
-# ============ BOMB SCRIPT ============
+# Bomb planting script
 sudo tee /opt/plant_bomb.sh << 'BOMBSCRIPT'
 #!/bin/bash
-# Usage: /opt/plant_bomb.sh <service> <defuse_code> <fuse_minutes>
-# Called remotely when red team plants bomb
-
 SERVICE=$1
 DEFUSE_CODE=$2
 FUSE_MIN=${3:-5}
-
 BOMB_FILE="/tmp/.bomb_${SERVICE}.txt"
-DETONATION_TIME=$(date -d "+${FUSE_MIN} minutes" '+%H:%M:%S')
-
 cat > "$BOMB_FILE" << EOF
 ╔═══════════════════════════════════════╗
 ║  💣 TIME BOMB DETECTED 💣             ║
-╠═══════════════════════════════════════╣
-║  Target: $SERVICE
-║  Detonates at: $DETONATION_TIME
-║  
-║  DEFUSE CODE: $DEFUSE_CODE
-║  
-║  Submit code to Blue Team panel
-║  to prevent service destruction!
+║  Target: $SERVICE                     ║
+║  DEFUSE CODE: $DEFUSE_CODE            ║
 ╚═══════════════════════════════════════╝
 EOF
-
 chmod 644 "$BOMB_FILE"
-echo "Bomb planted at $BOMB_FILE"
+echo "Bomb planted"
 BOMBSCRIPT
 sudo chmod +x /opt/plant_bomb.sh
 
-# ============ SERVICE CHECK SCRIPT ============
-sudo tee /opt/check_services.sh << 'CHECKSCRIPT'
-#!/bin/bash
-# Returns JSON status of services
-
-WEB=$(systemctl is-active apache2)
-DB=$(systemctl is-active mariadb || systemctl is-active mysql)
-SMB=$(systemctl is-active smbd)
-
-echo "{"
-echo "  \"web\": \"$WEB\","
-echo "  \"database\": \"$DB\","
-echo "  \"fileserver\": \"$SMB\""
-echo "}"
-CHECKSCRIPT
-sudo chmod +x /opt/check_services.sh
-
-echo ""
-echo "=== Target Setup Complete ==="
-echo ""
-echo "Vulnerabilities planted:"
-echo "  1. /var/www/html/includes/config.php - DB creds in plaintext"
-echo "  2. /var/www/html/admin/.login.php.bak - Old backup with admin creds"
-echo "  3. /srv/samba/IT/server_passwords.txt - All passwords in text file"
-echo "  4. /home/webapp/.bash_history - Command history with creds"
-echo "  5. MySQL users table - Passwords stored in plaintext"
-echo ""
-echo "Attack paths:"
-echo "  Web → Find config.php → Get DB creds → Access database → Get flag"
-echo "  SMB → Browse IT share → Get server_passwords.txt → SSH/DB access"
-echo "  Web → Find .login.php.bak → Get admin creds"
-echo ""
+echo "=== Setup Complete ==="
 SETUP
 
 sudo chmod +x /opt/setup_target.sh
 sudo /opt/setup_target.sh
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-sudo /opt/place_flags.sh "RED{eac0ef58602ef3d9}" "RED{93d0d6080b5f0078}" "RED{b27f8da343d19017}"
-# === DATABASE SETUP ===
-sudo mysql << 'EOF'
-CREATE DATABASE IF NOT EXISTS corporate;
-CREATE USER IF NOT EXISTS 'webapp'@'localhost' IDENTIFIED BY 'password123';
-GRANT ALL ON corporate.* TO 'webapp'@'localhost';
-CREATE TABLE corporate.customers (id INT, name VARCHAR(100), ssn VARCHAR(20));
-INSERT INTO corporate.customers VALUES (1, 'John Smith', '123-45-6789');
-INSERT INTO corporate.customers VALUES (2, 'Jane Doe', '987-65-4321');
-CREATE TABLE corporate.secrets (id INT, flag VARCHAR(100));
-FLUSH PRIVILEGES;
-EOF
-
-# === SAMBA SETUP ===
-sudo mkdir -p /srv/samba/shared
-sudo mkdir -p /srv/samba/confidential
-sudo chmod 777 /srv/samba/shared
-sudo chmod 755 /srv/samba/confidential
-
-# Configure Samba
-sudo tee /etc/samba/smb.conf << 'EOF'
-[global]
-workgroup = WORKGROUP
-server string = File Server
-security = user
-map to guest = Bad User
-
-[shared]
-path = /srv/samba/shared
-browsable = yes
-writable = yes
-guest ok = yes
-
-[confidential]
-path = /srv/samba/confidential
-browsable = yes
-writable = no
-guest ok = no
-valid users = rvb-target
-EOF
-
-# Set samba password for rvb-target
-echo -e "T@rg3t123!\nT@rg3t123!" | sudo smbpasswd -a rvb-target
-
-sudo systemctl restart smbd
-
-# === CREATE FLAG PLACEMENT SCRIPT ===
-sudo tee /opt/place_flags.sh << 'EOF'
-#!/bin/bash
-# Place flags for RvB match
-# Usage: /opt/place_flags.sh <web_flag> <db_flag> <file_flag>
-
-WEB_FLAG=${1:-"RED{default_web_flag}"}
-DB_FLAG=${2:-"RED{default_db_flag}"}
-FILE_FLAG=${3:-"RED{default_file_flag}"}
-
-# Web flag - hidden in web directory
-echo "$WEB_FLAG" > /var/www/html/.secret/flag.txt
-chmod 644 /var/www/html/.secret/flag.txt
-
-# Database flag - in secrets table  
-mysql -e "DELETE FROM corporate.secrets; INSERT INTO corporate.secrets VALUES (1, '$DB_FLAG');"
-
-# File server flag - in confidential share
-echo "$FILE_FLAG" > /srv/samba/confidential/flag.txt
-chmod 644 /srv/samba/confidential/flag.txt
-
-# Also create restore flags for blue team to find after they secure
-echo "BLUE{web_restored}" > /var/www/html/.blue_restore.txt
-echo "BLUE{db_restored}" > /tmp/.db_restore_flag.txt
-echo "BLUE{file_restored}" > /srv/samba/confidential/.restore_flag.txt
-
-echo "Flags placed successfully!"
-EOF
-
-sudo chmod +x /opt/place_flags.sh
-
-# Test it
-sudo /opt/place_flags.sh "RED{test123}" "RED{dbtest456}" "RED{filetest789}"
-
-echo "Setup complete! Verify services:"
-echo "  Web: curl http://localhost"
-echo "  MySQL: mysql -u webapp -ppassword123 corporate -e 'SELECT * FROM secrets'"
-echo "  Samba: smbclient //localhost/shared -N"
