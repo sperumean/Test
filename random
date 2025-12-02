@@ -1,0 +1,84 @@
+
+# === DATABASE SETUP ===
+sudo mysql << 'EOF'
+CREATE DATABASE IF NOT EXISTS corporate;
+CREATE USER IF NOT EXISTS 'webapp'@'localhost' IDENTIFIED BY 'password123';
+GRANT ALL ON corporate.* TO 'webapp'@'localhost';
+CREATE TABLE corporate.customers (id INT, name VARCHAR(100), ssn VARCHAR(20));
+INSERT INTO corporate.customers VALUES (1, 'John Smith', '123-45-6789');
+INSERT INTO corporate.customers VALUES (2, 'Jane Doe', '987-65-4321');
+CREATE TABLE corporate.secrets (id INT, flag VARCHAR(100));
+FLUSH PRIVILEGES;
+EOF
+
+# === SAMBA SETUP ===
+sudo mkdir -p /srv/samba/shared
+sudo mkdir -p /srv/samba/confidential
+sudo chmod 777 /srv/samba/shared
+sudo chmod 755 /srv/samba/confidential
+
+# Configure Samba
+sudo tee /etc/samba/smb.conf << 'EOF'
+[global]
+workgroup = WORKGROUP
+server string = File Server
+security = user
+map to guest = Bad User
+
+[shared]
+path = /srv/samba/shared
+browsable = yes
+writable = yes
+guest ok = yes
+
+[confidential]
+path = /srv/samba/confidential
+browsable = yes
+writable = no
+guest ok = no
+valid users = rvb-target
+EOF
+
+# Set samba password for rvb-target
+echo -e "T@rg3t123!\nT@rg3t123!" | sudo smbpasswd -a rvb-target
+
+sudo systemctl restart smbd
+
+# === CREATE FLAG PLACEMENT SCRIPT ===
+sudo tee /opt/place_flags.sh << 'EOF'
+#!/bin/bash
+# Place flags for RvB match
+# Usage: /opt/place_flags.sh <web_flag> <db_flag> <file_flag>
+
+WEB_FLAG=${1:-"RED{default_web_flag}"}
+DB_FLAG=${2:-"RED{default_db_flag}"}
+FILE_FLAG=${3:-"RED{default_file_flag}"}
+
+# Web flag - hidden in web directory
+echo "$WEB_FLAG" > /var/www/html/.secret/flag.txt
+chmod 644 /var/www/html/.secret/flag.txt
+
+# Database flag - in secrets table  
+mysql -e "DELETE FROM corporate.secrets; INSERT INTO corporate.secrets VALUES (1, '$DB_FLAG');"
+
+# File server flag - in confidential share
+echo "$FILE_FLAG" > /srv/samba/confidential/flag.txt
+chmod 644 /srv/samba/confidential/flag.txt
+
+# Also create restore flags for blue team to find after they secure
+echo "BLUE{web_restored}" > /var/www/html/.blue_restore.txt
+echo "BLUE{db_restored}" > /tmp/.db_restore_flag.txt
+echo "BLUE{file_restored}" > /srv/samba/confidential/.restore_flag.txt
+
+echo "Flags placed successfully!"
+EOF
+
+sudo chmod +x /opt/place_flags.sh
+
+# Test it
+sudo /opt/place_flags.sh "RED{test123}" "RED{dbtest456}" "RED{filetest789}"
+
+echo "Setup complete! Verify services:"
+echo "  Web: curl http://localhost"
+echo "  MySQL: mysql -u webapp -ppassword123 corporate -e 'SELECT * FROM secrets'"
+echo "  Samba: smbclient //localhost/shared -N"
